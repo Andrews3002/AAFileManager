@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from "electron";
+const { contextBridge, ipcRenderer } = require("electron");
 
 // create global object called window.api to do (eg window.api.createEntry(data))
 contextBridge.exposeInMainWorld("api", {
@@ -16,3 +16,5 @@ contextBridge.exposeInMainWorld("api", {
 
     nextRefNum: () => ipcRenderer.invoke("next-refnum"),
 });
+
+console.log("PRELOAD LOADED");

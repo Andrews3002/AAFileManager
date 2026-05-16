@@ -1,11 +1,8 @@
-import { app, BrowserWindow, ipcMain, shell } from "electron";
-import fileHandler from "./fileHandler.js";
-import db from "./databaseHandler.js";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+require("dotenv/config");
+const { app, BrowserWindow, ipcMain, shell } = require("electron");
+const fileHandler = require("./fileHandler.cjs");
+const db = require("./databaseHandler.cjs");
+const path = require("path");
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -13,7 +10,7 @@ function createWindow() {
         height: 900,
 
         webPreferences: {
-            preload: path.join(__dirname, "preload.js"),
+            preload: path.join(__dirname, "preload.cjs"),
             contextIsolation: true,
             nodeIntegration: false,
         },

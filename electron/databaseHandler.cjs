@@ -1,6 +1,7 @@
-import prismaPkg from "../node_modules/@prisma/client/.prisma/client/default.js";
-import { PrismaPg } from "@prisma/adapter-pg";
-import pg from "pg";
+require("dotenv/config");
+const prismaPkg = require("@prisma/client/.prisma/client/default.js");
+const { PrismaPg } = require("@prisma/adapter-pg");
+const pg = require("pg");
 
 const { PrismaClient } = prismaPkg;
 const { Pool } = pg;
@@ -71,7 +72,7 @@ async function updateEntry(data) {
     });
 }
 
-export default {
+module.exports = {
     createEntry,
     getEntries,
     deleteEntry,

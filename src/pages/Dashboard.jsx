@@ -10,7 +10,7 @@ export default function Dashboard() {
     }, []);
 
     const filteredEntries = entries.filter((e) =>
-        e.name.toLowerCase().includes(search.toLowerCase()),
+        e.title.toLowerCase().includes(search.toLowerCase()),
     );
 
     async function loadEntries() {
