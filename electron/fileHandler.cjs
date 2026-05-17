@@ -18,4 +18,10 @@ async function savePDF(file, refNum) {
     return filePath;
 }
 
-module.exports = { savePDF };
+async function removePDF(filepath) {
+    await fs.remove(filepath);
+
+    return;
+}
+
+module.exports = { savePDF, removePDF };

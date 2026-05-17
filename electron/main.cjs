@@ -56,6 +56,10 @@ ipcMain.handle("save-pdf", async (_, file, refNum) => {
     return await fileHandler.savePDF(file, refNum);
 });
 
+ipcMain.handle("remove-pdf", async (_, filepath) => {
+    return await fileHandler.removePDF(filepath);
+});
+
 ipcMain.handle("next-refnum", async () => {
     return await db.nextRefNum();
 });

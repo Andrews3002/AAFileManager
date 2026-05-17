@@ -1,20 +1,20 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import fs from "fs-extra";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function EntryForm({ onSave }) {
     const navigate = useNavigate();
-    const [title, setTitle] = useState("");
-    const [type, setType] = useState("DOCUMENT");
-    const [date, setDate] = useState(null);
-    const [amount, setAmount] = useState(null);
+    const { state } = useLocation();
+    const entry = state.entry;
+    const [title, setTitle] = useState(entry.title);
+    const [type, setType] = useState(entry.type);
+    const [date, setDate] = useState(entry.date);
+    const [amount, setAmount] = useState(entry.amount);
     const [file, setFile] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        let filePath = null;
-        // let oldFilePath = 
+        let filePath = entry.pdfPath;
 
         if(file){
             const arrayBuffer = await file.arrayBuffer();
@@ -24,10 +24,17 @@ export default function EntryForm({ onSave }) {
                 buffer: Array.from(new Uint8Array(arrayBuffer)),
             };
 
-            filePath = await window.api.savePDF(obj, nextRefNum);
+            await window.api.removePDF(filePath);
+
+            filePath = await window.api.savePDF(obj, entry.id);
         }
 
+        let id = entry.id;
+
+        console.log(filePath);
+
         const formData = {
+            id,
             title,
             type,
             date,
@@ -44,20 +51,29 @@ export default function EntryForm({ onSave }) {
             <h1>Update File Entry</h1>
             <input
                 placeholder="Title"
+                value = {title}
                 onChange={(e) => setTitle(e.target.value)}
             />
 
-            <select onChange={(e) => setType(e.target.value)}>
+            <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+            >
                 <option>DOCUMENT</option>
                 <option>FORM</option>
                 <option>RECIEPT</option>
             </select>
 
-            <input type="date" onChange={(e) => setDate(e.target.value)} />
+            <input
+                value={new Date(date).toISOString().split("T")[0]}
+                type="date"
+                onChange={(e) => setDate(e.target.value)}
+            />
 
             <input
                 type="number"
-                placeholder="Amount"
+                placeholder="amount"
+                value={amount}
                 step="0.01"
                 onChange={(e) => setAmount(e.target.value)}
             />

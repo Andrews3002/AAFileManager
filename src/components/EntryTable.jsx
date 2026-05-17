@@ -35,7 +35,7 @@ export default function EntryTable({ entries, onDelete }) {
 
                         <td>
                             <button
-                                onClick={() => {navigate("/update-entry")}}>
+                                onClick={() => {navigate("/update-entry", {state: { entry: e }})}}>
                                 Edit
                             </button>
                         </td>

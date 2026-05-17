@@ -14,5 +14,7 @@ contextBridge.exposeInMainWorld("api", {
 
     savePDF: (file, refNum) => ipcRenderer.invoke("save-pdf", file, refNum),
 
+    removePDF: (filePath) => ipcRenderer.invoke("remove-pdf", filePath),
+
     nextRefNum: () => ipcRenderer.invoke("next-refnum"),
 });

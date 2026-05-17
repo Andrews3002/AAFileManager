@@ -83,7 +83,7 @@ async function updateEntry(data) {
             type: data.type,
             date: new Date(data.date),
             amount: data.amount,
-            pdfPath: data.pdfPath,
+            pdfPath: data.filePath,
         },
     });
 }
