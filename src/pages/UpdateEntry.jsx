@@ -86,6 +86,7 @@ export default function EntryForm({ onSave }) {
 
             <button type="submit">Save</button>
             <button
+                type="button"
                 onClick={() => {
                     navigate("/");
                 }}

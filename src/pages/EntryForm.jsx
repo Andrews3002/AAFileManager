@@ -70,7 +70,7 @@ export default function EntryForm({ onSave }) {
 
             <button type="submit">Save</button>
             <button
-                type="cancel"
+                type="button"
                 onClick={() => {
                     navigate("/");
                 }}
