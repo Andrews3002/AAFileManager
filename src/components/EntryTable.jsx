@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 export default function EntryTable({ entries, onDelete }) {
+    const navigate = useNavigate();
+
     return (
         <table className="w-full">
             <thead>
@@ -7,7 +11,6 @@ export default function EntryTable({ entries, onDelete }) {
                     <th>Type</th>
                     <th>Date</th>
                     <th>Amount</th>
-                    <th>PDF</th>
                 </tr>
             </thead>
 
@@ -20,13 +23,20 @@ export default function EntryTable({ entries, onDelete }) {
 
                         <td>{new Date(e.date).toISOString().split("T")[0]}</td>
 
-                        <td>{e.amount}</td>
+                        <td>${e.amount.toFixed(2)}</td>
 
                         <td>
                             <button
                                 onClick={() => window.api.openPDF(e.pdfPath)}
                             >
                                 Open PDF
+                            </button>
+                        </td>
+
+                        <td>
+                            <button
+                                onClick={() => {navigate("/update-entry")}}>
+                                Edit
                             </button>
                         </td>
 

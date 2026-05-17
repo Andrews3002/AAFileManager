@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import EntryTable from "../components/EntryTable.jsx";
 
 export default function Dashboard() {
+    const navigate = useNavigate();
     const [entries, setEntries] = useState([]);
     const [search, setSearch] = useState("");
 
@@ -33,6 +35,8 @@ export default function Dashboard() {
                 onChange={(e) => setSearch(e.target.value)}
             />
 
+            <button>Search</button>
+            <button onClick={() => navigate("/entry-form")}>Add Entry</button>
             <EntryTable entries={entries} onDelete={handleDelete} />
         </div>
     );

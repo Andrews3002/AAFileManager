@@ -16,6 +16,19 @@ function createWindow() {
         },
     });
 
+    win.webContents.session.webRequest.onHeadersReceived(
+        (details, callback) => {
+            callback({
+                responseHeaders: {
+                    ...details.responseHeaders,
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; connect-src 'self' http://localhost:5173 ws://localhost:5173; style-src 'self' 'unsafe-inline';",
+                    ],
+                },
+            });
+        },
+    );
+
     win.loadURL("http://localhost:5173");
 }
 

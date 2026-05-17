@@ -10,7 +10,10 @@ async function savePDF(file, refNum) {
     const fileName = `#${refNum}-${file.name}`;
     const filePath = path.join(PDF_DIR, fileName);
 
-    await fs.copy(file.path, filePath);
+    await fs.writeFile(
+        filePath,
+        Buffer.from(file.buffer)
+    );
 
     return filePath;
 }

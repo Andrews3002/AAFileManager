@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function EntryForm({ onSave }) {
+    const navigate = useNavigate();
     const [title, setTitle] = useState("");
-    const [type, setType] = useState("");
+    const [type, setType] = useState("DOCUMENT");
     const [date, setDate] = useState(null);
     const [amount, setAmount] = useState(null);
     const [file, setFile] = useState(null);
@@ -10,13 +12,19 @@ export default function EntryForm({ onSave }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        nextRefNum = await window.api.nextRefNum();
+        const nextRefNum = await window.api.nextRefNum();
+
+        let filePath = null;
 
         if(file){
-            filePath = await window.api.savePDF(file, nextRefNum);
-        }
-        else{
-            filePath = null
+            const arrayBuffer = await file.arrayBuffer();
+
+            const obj = {
+                name: file.name,
+                buffer: Array.from(new Uint8Array(arrayBuffer)),
+            };
+
+            filePath = await window.api.savePDF(obj, nextRefNum);
         }
 
         const formData = {
@@ -28,10 +36,12 @@ export default function EntryForm({ onSave }) {
         };
 
         await window.api.createEntry(formData);
+        navigate("/");  
     };
 
     return (
         <form onSubmit={handleSubmit} className="p-4 space-y-3">
+            <h1>Add File Entry</h1>
             <input
                 placeholder="Title"
                 onChange={(e) => setTitle(e.target.value)}
@@ -48,6 +58,7 @@ export default function EntryForm({ onSave }) {
             <input
                 type="number"
                 placeholder="Amount"
+                step="0.01"
                 onChange={(e) => setAmount(e.target.value)}
             />
 
@@ -58,6 +69,13 @@ export default function EntryForm({ onSave }) {
             />
 
             <button type="submit">Save</button>
+            <button
+                onClick={() => {
+                    navigate("/");
+                }}
+            >
+                Cancel
+            </button>
         </form>
     );
 }

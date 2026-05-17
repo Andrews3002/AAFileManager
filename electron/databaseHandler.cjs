@@ -1,4 +1,5 @@
 require("dotenv/config");
+const fs = require("fs-extra");
 const prismaPkg = require("@prisma/client/.prisma/client/default.js");
 const { PrismaPg } = require("@prisma/adapter-pg");
 const pg = require("pg");
@@ -23,7 +24,7 @@ async function createEntry(data) {
             type: data.type,
             date: new Date(data.date),
             amount: data.amount,
-            pdfPath: data.pdfPath,
+            pdfPath: data.filePath,
         },
     });
 }
@@ -37,9 +38,23 @@ async function getEntries() {
 }
 
 async function deleteEntry(id) {
-    return await prisma.entry.delete({
+    const entry = await prisma.entry.findUnique({ where: { id } });
+
+    if (entry.pdfPath) {
+        await fs.remove(entry.pdfPath);
+    }
+    
+    await prisma.entry.delete({
         where: { id },
     });
+
+    const entries = await prisma.entry.findMany();
+
+    if (entries.length === 0){
+        return await prisma.$executeRaw`ALTER SEQUENCE "Entry_id_seq" RESTART WITH 1`;
+    }
+  
+    return;
 }
 
 async function nextRefNum() {
@@ -52,8 +67,9 @@ async function nextRefNum() {
     if (lastEntry) {
         return lastEntry.id + 1;
     }
-
-    return 1;
+    else{
+        return 1;
+    }
 }
 
 async function updateEntry(data) {

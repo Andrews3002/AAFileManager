@@ -16,5 +16,3 @@ contextBridge.exposeInMainWorld("api", {
 
     nextRefNum: () => ipcRenderer.invoke("next-refnum"),
 });
-
-console.log("PRELOAD LOADED");
