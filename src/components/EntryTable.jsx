@@ -7,6 +7,7 @@ export default function EntryTable({ entries, onDelete }) {
         <table className="w-full">
             <thead>
                 <tr>
+                    <th>Ref#</th>
                     <th>Title</th>
                     <th>Type</th>
                     <th>Date</th>
@@ -17,13 +18,27 @@ export default function EntryTable({ entries, onDelete }) {
             <tbody>
                 {entries.map((e) => (
                     <tr key={e.id}>
+                        <td>{e.id}</td>
+
                         <td>{e.title}</td>
 
                         <td>{e.type}</td>
 
-                        <td>{e.date != null ? new Date(e.date).toISOString().split("T")[0]: "-"}</td>
+                        <td>
+                            {e.date != null
+                                ? new Date(e.date).toLocaleDateString("en-US", {
+                                      month: "long",
+                                      day: "numeric",
+                                      year: "numeric",
+                                  })
+                                : "-"}
+                        </td>
 
-                        <td>{e.amount != null ? `$${e.amount.toFixed(2)}` : "-"}</td>
+                        <td>
+                            {e.amount != null
+                                ? `$${e.amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                                : "-"}
+                        </td>
 
                         <td>
                             <button
@@ -35,7 +50,12 @@ export default function EntryTable({ entries, onDelete }) {
 
                         <td>
                             <button
-                                onClick={() => {navigate("/update-entry", {state: { entry: e }})}}>
+                                onClick={() => {
+                                    navigate("/update-entry", {
+                                        state: { entry: e },
+                                    });
+                                }}
+                            >
                                 Edit
                             </button>
                         </td>
