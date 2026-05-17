@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function EntryForm({ onSave }) {
@@ -8,6 +8,7 @@ export default function EntryForm({ onSave }) {
     const [date, setDate] = useState(null);
     const [amount, setAmount] = useState(null);
     const [file, setFile] = useState(null);
+    const fileRef = useRef(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,11 +28,14 @@ export default function EntryForm({ onSave }) {
             filePath = await window.api.savePDF(obj, nextRefNum);
         }
 
+        const parsedDate = date ? new Date(date) : null;
+        const parsedAmount = amount ? parseFloat(amount) : null;
+
         const formData = {
             title,
             type,
-            date,
-            amount: parseFloat(amount),
+            date: parsedDate,
+            amount: parsedAmount,
             filePath,
         };
 
@@ -53,7 +57,14 @@ export default function EntryForm({ onSave }) {
                 <option>RECIEPT</option>
             </select>
 
-            <input type="date" onChange={(e) => setDate(e.target.value)} />
+            <input
+                value={date ? new Date(date).toISOString().split("T")[0] : ""}
+                type="date"
+                onChange={(e) => setDate(e.target.value)}
+            />
+            <button type="button" onClick={() => setDate(null)}>
+                Clear Date
+            </button>
 
             <input
                 type="number"
@@ -65,8 +76,18 @@ export default function EntryForm({ onSave }) {
             <input
                 type="file"
                 accept="application/pdf"
+                ref={fileRef}
                 onChange={(e) => setFile(e.target.files[0])}
             />
+            <button
+                type="button"
+                onClick={() => {
+                    setFile(null);
+                    fileRef.current.value = "";
+                }}
+            >
+                Remove File
+            </button>
 
             <button type="submit">Save</button>
             <button

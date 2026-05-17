@@ -12,7 +12,8 @@ export default function Dashboard() {
     }, []);
 
     const filteredEntries = entries.filter((e) =>
-        e.title.toLowerCase().includes(search.toLowerCase()),
+        e.title.toLowerCase().includes(search.toLowerCase()) ||
+        e.type.toLowerCase().includes(search.toLowerCase())
     );
 
     async function loadEntries() {
@@ -35,9 +36,8 @@ export default function Dashboard() {
                 onChange={(e) => setSearch(e.target.value)}
             />
 
-            <button>Search</button>
             <button onClick={() => navigate("/entry-form")}>Add Entry</button>
-            <EntryTable entries={entries} onDelete={handleDelete} />
+            <EntryTable entries={filteredEntries} onDelete={handleDelete} />
         </div>
     );
 }

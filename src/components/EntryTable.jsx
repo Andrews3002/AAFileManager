@@ -21,9 +21,9 @@ export default function EntryTable({ entries, onDelete }) {
 
                         <td>{e.type}</td>
 
-                        <td>{new Date(e.date).toISOString().split("T")[0]}</td>
+                        <td>{e.date != null ? new Date(e.date).toISOString().split("T")[0]: "-"}</td>
 
-                        <td>${e.amount.toFixed(2)}</td>
+                        <td>{e.amount != null ? `$${e.amount.toFixed(2)}` : "-"}</td>
 
                         <td>
                             <button

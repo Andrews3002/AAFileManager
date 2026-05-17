@@ -22,7 +22,7 @@ async function createEntry(data) {
         data: {
             title: data.title,
             type: data.type,
-            date: new Date(data.date),
+            date: data.date,
             amount: data.amount,
             pdfPath: data.filePath,
         },
@@ -81,7 +81,7 @@ async function updateEntry(data) {
         data: {
             title: data.title,
             type: data.type,
-            date: new Date(data.date),
+            date: data.date,
             amount: data.amount,
             pdfPath: data.filePath,
         },
