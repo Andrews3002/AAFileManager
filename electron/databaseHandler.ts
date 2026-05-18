@@ -1,23 +1,17 @@
-require("dotenv/config");
-const fs = require("fs-extra");
-const prismaPkg = require("@prisma/client/.prisma/client/default.js");
-const { PrismaPg } = require("@prisma/adapter-pg");
-const pg = require("pg");
+import fs from "fs-extra";
+import prisma from "../lib/prisma.js";
+import { EntryType } from "../generated/prisma/index.js";
 
-const { PrismaClient } = prismaPkg;
-const { Pool } = pg;
+interface EntryData {
+    id?: number;
+    title: string;
+    type: EntryType;
+    date: Date | string;
+    amount: number;
+    filePath?: string | null;
+}
 
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-});
-
-const adapter = new PrismaPg(pool);
-
-const prisma = new PrismaClient({
-    adapter,
-});
-
-async function createEntry(data) {
+async function createEntry(data: EntryData) {
     return await prisma.entry.create({
         data: {
             title: data.title,
@@ -37,27 +31,31 @@ async function getEntries() {
     });
 }
 
-async function deleteEntry(id) {
-    const entry = await prisma.entry.findUnique({ where: { id } });
+async function deleteEntry(id: number) {
+    const entry = await prisma.entry.findUnique({
+        where: { id },
+    });
 
-    if (entry.pdfPath) {
+    if (entry?.pdfPath) {
         await fs.remove(entry.pdfPath);
     }
-    
+
     await prisma.entry.delete({
         where: { id },
     });
 
     const entries = await prisma.entry.findMany();
 
-    if (entries.length === 0){
-        return await prisma.$executeRaw`ALTER SEQUENCE "Entry_id_seq" RESTART WITH 1`;
+    if (entries.length === 0) {
+        return await prisma.$executeRaw`
+            ALTER SEQUENCE "Entry_id_seq" RESTART WITH 1
+        `;
     }
-  
+
     return;
 }
 
-async function nextRefNum() {
+async function nextRefNum(): Promise<number> {
     const lastEntry = await prisma.entry.findFirst({
         orderBy: {
             id: "desc",
@@ -66,13 +64,16 @@ async function nextRefNum() {
 
     if (lastEntry) {
         return lastEntry.id + 1;
-    }
-    else{
+    } else {
         return 1;
     }
 }
 
-async function updateEntry(data) {
+async function updateEntry(data: EntryData) {
+    if (!data.id) {
+        throw new Error("Entry ID is required");
+    }
+
     return await prisma.entry.update({
         where: {
             id: data.id,
@@ -88,7 +89,7 @@ async function updateEntry(data) {
     });
 }
 
-module.exports = {
+export default {
     createEntry,
     getEntries,
     deleteEntry,

@@ -1,19 +1,4 @@
-import prismaPkg from "../node_modules/@prisma/client/.prisma/client/default.js";
-import { PrismaPg } from "@prisma/adapter-pg";
-import pg from "pg";
-
-const { PrismaClient } = prismaPkg;
-const { Pool } = pg;
-
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-});
-
-const adapter = new PrismaPg(pool);
-
-const prisma = new PrismaClient({
-    adapter,
-});
+import prisma from "../lib/prisma"
 
 async function seed() {
     await prisma.entry.createMany({

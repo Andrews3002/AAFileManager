@@ -1,6 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
-// create global object called window.api to do (eg window.api.createEntry(data))
 contextBridge.exposeInMainWorld("api", {
     createEntry: (data) => ipcRenderer.invoke("create-entry", data),
 
@@ -12,7 +11,8 @@ contextBridge.exposeInMainWorld("api", {
 
     openPDF: (path) => ipcRenderer.invoke("open-pdf", path),
 
-    savePDF: (file, refNum) => ipcRenderer.invoke("save-pdf", file, refNum),
+    savePDF: (file, refNum) =>
+        ipcRenderer.invoke("save-pdf", file, refNum),
 
     removePDF: (filePath) => ipcRenderer.invoke("remove-pdf", filePath),
 

@@ -1,8 +1,12 @@
-require("dotenv/config");
-const { app, BrowserWindow, ipcMain, shell } = require("electron");
-const fileHandler = require("./fileHandler.cjs");
-const db = require("./databaseHandler.cjs");
-const path = require("path");
+import "dotenv/config";
+import { app, BrowserWindow, ipcMain, shell } from "electron";
+import fileHandler from "./fileHandler.js";
+import db from "./databaseHandler.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -10,26 +14,21 @@ function createWindow() {
         height: 900,
 
         webPreferences: {
-            preload: path.join(__dirname, "preload.cjs"),
+            preload: path.join(__dirname, "preload.js"),
             contextIsolation: true,
             nodeIntegration: false,
         },
     });
 
-    win.webContents.session.webRequest.onHeadersReceived(
-        (details, callback) => {
-            callback({
-                responseHeaders: {
-                    ...details.responseHeaders,
-                    "Content-Security-Policy": [
-                        "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; connect-src 'self' http://localhost:5173 ws://localhost:5173; style-src 'self' 'unsafe-inline';",
-                    ],
-                },
-            });
-        },
-    );
+    const loadURL = app.isPackaged
+        ? `file://${path.join(__dirname, "../dist/index.html")}`
+        : "http://localhost:5173";
 
-    win.loadURL("http://localhost:5173");
+    win.loadURL(loadURL);
+
+    if (!app.isPackaged) {
+        win.webContents.openDevTools();
+    }
 }
 
 ipcMain.handle("create-entry", async (_, data) => {

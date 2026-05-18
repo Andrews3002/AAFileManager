@@ -9,11 +9,11 @@ datasource db {
 }
 
 model Entry {
-  id Int @id @default(autoincrement())
-  title String
-  type EntryType
-  date DateTime?
-  amount Float?
+  id      Int       @id @default(autoincrement())
+  title   String
+  type    EntryType
+  date    DateTime?
+  amount  Float?
   pdfPath String?
 }
 
