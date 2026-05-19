@@ -45,5 +45,13 @@
         "tsx": "^4.21.0",
         "typescript": "^5.1.6",
         "vite": "^8.0.12"
+    },
+    "build": {
+        "extraResources": [
+            {
+                "from": ".env",
+                "to": ".env"
+            }
+        ]
     }
 }
