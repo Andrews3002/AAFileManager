@@ -19,9 +19,10 @@ function createWindow() {
             nodeIntegration: false,
         },
     });
+    
 
     if (app.isPackaged) {
-        win.loadFile(path.join(__dirname, "../dist/index.html"));
+        win.loadFile(path.join(__dirname, "../renderer-dist/index.html"));
     } else {
         win.loadURL("http://localhost:5173");
         win.webContents.openDevTools();
