@@ -3,14 +3,13 @@
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "main": "dist/electron/main.js",
+    "main": "./electron/main.ts",
     "scripts": {
         "dev": "vite",
         "once": "electron .",
         "auto": "electronmon .",
         "build": "vite build",
-        "build:main": "tsc -p tsconfigs.json",
-        "dist": "npm run build && npm run build:main && electron-builder",
+        "dist": "npm run build && electron-builder",
         "lint": "eslint .",
         "preview": "vite preview"
     },
@@ -46,22 +45,5 @@
         "tsx": "^4.21.0",
         "typescript": "^5.1.6",
         "vite": "^8.0.12"
-    },
-    "build": {
-        "appId": "com.yourname.aafilemanager",
-        "productName": "AA File Manager",
-        "files": [
-            "dist/**/*",
-            "generated/**/*",
-            "electron/**/*",
-            "package.json",
-            "node_modules/**/*"
-        ],
-        "win": {
-            "target": [
-                "nsis"
-            ],
-            "artifactName": "AAFileManager Setup ${version}.exe"
-        }
     }
 }

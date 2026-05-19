@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { app, BrowserWindow, ipcMain, shell } from "electron";
-import fileHandler from "./fileHandler.js";
-import db from "./databaseHandler.js";
+import fileHandler from "./fileHandler.ts";
+import db from "./databaseHandler.ts";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -20,13 +20,10 @@ function createWindow() {
         },
     });
 
-    const loadURL = app.isPackaged
-        ? `file://${path.join(__dirname, "../dist/index.html")}`
-        : "http://localhost:5173";
-
-    win.loadURL(loadURL);
-
-    if (!app.isPackaged) {
+    if (app.isPackaged) {
+        win.loadFile(path.join(__dirname, "../dist/index.html"));
+    } else {
+        win.loadURL("http://localhost:5173");
         win.webContents.openDevTools();
     }
 }

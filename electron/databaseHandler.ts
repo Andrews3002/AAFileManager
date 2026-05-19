@@ -1,5 +1,5 @@
 import fs from "fs-extra";
-import prisma from "../lib/prisma.js";
+import prisma from "../lib/prisma.ts";
 import { EntryType } from "../generated/prisma/index.js";
 
 interface EntryData {
