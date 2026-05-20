@@ -5,11 +5,16 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
 import dotenv from "dotenv";
 import path from "path";
-import { app } from "electron";
 
+//production
 dotenv.config({
-    path: app.isPackaged ? path.join(process.resourcesPath, ".env") : ".env",
+    path: path.join(process.resourcesPath, ".env")
 });
+
+//development
+// dotenv.config({
+//     path: ".env"
+// });
 
 const connectionString = process.env.DATABASE_URL!;
 

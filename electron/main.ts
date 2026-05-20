@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { app, BrowserWindow, ipcMain, shell } from "electron";
+import { app, BrowserWindow, ipcMain, shell, dialog } from "electron";
 import fileHandler from "./fileHandler.ts";
 import db from "./databaseHandler.ts";
 import path from "path";
@@ -8,8 +8,10 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+let win = null
+
 function createWindow() {
-    const win = new BrowserWindow({
+    win = new BrowserWindow({
         width: 1400,
         height: 900,
 
@@ -59,6 +61,19 @@ ipcMain.handle("remove-pdf", async (_, filepath) => {
 
 ipcMain.handle("next-refnum", async () => {
     return await db.nextRefNum();
+});
+
+ipcMain.handle("confirm-delete", async () => {
+    const result = await dialog.showMessageBox(win!, {
+        type: "warning",
+        buttons: ["Cancel", "Delete"],
+        defaultId: 0,
+        cancelId: 0,
+        title: "Confirm Delete",
+        message: "Delete this entry?",
+        detail: "This action cannot be undone.",
+    });
+    return result.response === 1;
 });
 
 app.whenReady().then(createWindow);

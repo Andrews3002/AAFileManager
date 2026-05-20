@@ -1,11 +1,8 @@
 import fs from "fs-extra";
 import path from "path";
-import { fileURLToPath } from "url";
+import { app } from "electron";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const PDF_DIR = path.join(__dirname, "../storage/pdfs");
+const PDF_DIR = path.join(app.getPath("userData"), "storage", "pdfs");
 
 interface UploadedFile {
     name: string;

@@ -300,7 +300,7 @@ export default function EntryForm() {
                                             className="field-label"
                                             htmlFor="amount"
                                         >
-                                            Amount (USD)
+                                            Amount
                                         </label>
                                         <input
                                             id="amount"
@@ -421,11 +421,13 @@ export default function EntryForm() {
                                                 type="file"
                                                 accept="application/pdf"
                                                 style={{ display: "none" }}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
                                                     setFile(
                                                         e.target.files[0] ||
                                                             null,
-                                                    )
+                                                    );
+                                                    window.api.refocusWindow();
+                                                }
                                                 }
                                                 tabIndex={-1}
                                                 aria-hidden="true"

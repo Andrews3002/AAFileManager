@@ -184,9 +184,10 @@ export default function Dashboard({ onCountChange }) {
     }, [entries, search, typeFilter]);
 
     async function handleDelete(id) {
-        if (!confirm("Delete this entry? This action cannot be undone."))
-            return;
+        const confirmed = await window.api.confirmDelete();
+        if (!confirmed) return;
         await window.api.deleteEntry(id);
+        window.api.refocusWindow();
         loadEntries();
     }
 

@@ -1,4 +1,4 @@
-import prisma from "../lib/prisma"
+import prisma from "../lib/prisma.ts";
 
 async function seed() {
     await prisma.entry.createMany({

@@ -306,7 +306,10 @@ export default function EntryTable({ entries, onDelete }) {
                                         </button>
                                         <button
                                             className="btn btn-danger btn-sm"
-                                            onClick={() => onDelete(e.id)}
+                                            onClick={async () => {
+                                                await onDelete(e.id);
+                                                window.api.refocusWindow();
+                                            }}
                                             aria-label={`Delete entry: ${e.title}`}
                                             title="Delete"
                                             style={{

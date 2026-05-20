@@ -11,10 +11,13 @@ contextBridge.exposeInMainWorld("api", {
 
     openPDF: (path) => ipcRenderer.invoke("open-pdf", path),
 
-    savePDF: (file, refNum) =>
-        ipcRenderer.invoke("save-pdf", file, refNum),
+    savePDF: (file, refNum) => ipcRenderer.invoke("save-pdf", file, refNum),
 
     removePDF: (filePath) => ipcRenderer.invoke("remove-pdf", filePath),
 
     nextRefNum: () => ipcRenderer.invoke("next-refnum"),
+
+    refocusWindow: () => ipcRenderer.send("refocus-window"),
+
+    confirmDelete: () => ipcRenderer.invoke("confirm-delete"),
 });

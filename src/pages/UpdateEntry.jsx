@@ -314,7 +314,7 @@ export default function UpdateEntry() {
                                             className="field-label"
                                             htmlFor="amount"
                                         >
-                                            Amount (USD)
+                                            Amount
                                         </label>
                                         <input
                                             id="amount"
@@ -441,7 +441,6 @@ export default function UpdateEntry() {
                                                         e.target.files[0] ||
                                                             null,
                                                     );
-                                                    setRemoveFile(false);
                                                 }}
                                                 tabIndex={-1}
                                                 aria-hidden="true"
