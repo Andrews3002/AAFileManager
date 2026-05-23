@@ -18,3 +18,4 @@ If you are developing a production application, we recommend using TypeScript wi
 weakness of version 1.0:
 - Cannot sort by date or amount
 - All dates are displayed in the table as the day before the actual date logged
+- Has no pagination 
